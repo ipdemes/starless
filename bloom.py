@@ -1,6 +1,6 @@
 from scipy.special import j1
 from scipy.signal import convolve2d
-import numpy as np
+import cupynumeric as np
 
 # "airy disk" function (actually approximate, and a rescaling, but it's ok)
 def airy_disk(x):   

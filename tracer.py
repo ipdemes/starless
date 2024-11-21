@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import numpy as np
+import cupynumeric as np
 import matplotlib.pyplot as plt
 import scipy.ndimage as ndim
 import scipy.misc as spm
@@ -25,7 +25,7 @@ import bloom
 
 import gc
 import curses
-
+from PIL import Image
 
 #enums
 METH_LEAPFROG = 0
@@ -323,12 +323,13 @@ def srgbtorgb(arr):
     arr[mask] += 0.055
     arr[mask] /= 1.055
     arr[mask] **= 2.4
-    arr[-mask] /= 12.92
+    mask1=-mask
+    arr[mask1] /= 12.92
 
 
 logger.debug("Loading textures...")
 if SKY_TEXTURE == 'texture':
-    texarr_sky = spm.imread('textures/bgedit.jpg')
+    texarr_sky = np.asarray(Image.open('textures/bgedit.jpg'))
     # must convert to float here so we can work in linear colour
     texarr_sky = texarr_sky.astype(float)
     texarr_sky /= 255.0
@@ -472,8 +473,10 @@ def saveToImgBool(arr,fname):
 #for shared arrays
 
 def tonumpyarray(mp_arr):
-    a = np.frombuffer(mp_arr.get_obj(), dtype=np.float32)
-    a.shape = ((numPixels,3))
+    import numpy
+    _a = numpy.frombuffer(mp_arr.get_obj(), dtype=np.float32)
+    _a.shape = ((numPixels,3))
+    a=np.asarray(_a)
     return a
 
 
